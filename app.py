@@ -1,52 +1,29 @@
-import openpyxl, os, shutil
+import os
+
+import openpyxl
+from openpyxl.styles import Font
+from openpyxl.drawing.image import Image
 from openpyxl.styles.alignment import Alignment
 
 cellsToValidate = ['A2', 'A8', 'G9', 'G10', 'A24', 'D24', 'H24', 'J24', 'H29', 'J29', 'J30']
-
 excelFolder = "c:/Users/mark/PycharmProjects/excel/"
 
 # create new folder for updated files
-updateFolder = excelFolder + "backup/"
-if not(os.path.exists(updateFolder)):
+updateFolder = excelFolder + "updates/"
+if not (os.path.exists(updateFolder)):
     os.mkdir(updateFolder)
 
-def update_title():  # A2
-    # is title in A2?
-    return
+def create_new_filename(fileName):
+    parts = fileName.split()    #split on the space delimiter (default)
+    parts[1] = "2020"   #2nd element of list contains the year, update it to the current year
+    newFileName = " ".join(parts)   #put it all back together again containg new year, delimited by spaces
+    return newFileName
 
-
-def billing_date(cell_letter):  # G9
-    billingDate = ws[cell_letter]
-    billingDate.value = "Billing Date: 09/09/2021"
-    billingDate.alignment = Alignment(horizontal="right")
-    return
-
-def due_date():  # G10
-    return
-
-
-def date_A24():  # A24
-    return
-
-
-def president_info():  # A8
-    return
-
-
-def bill_period():  # D24
-    return
-
-
-def payments():  # J24
-    return
-
-
-def totals():  # H29
-    return
-
-
-def payment():  # J30
-    return
+def update_cell(cellToUpdate, newValue):
+    cell = ws[cellToUpdate]  # A2, C5, A8, etc....
+    cell.value = newValue  # string, but maybe date or numeric if necessary
+    # cell.alignment = Alignment(horizontal = "center", vertical = "center")
+    return cell
 
 
 with os.scandir(excelFolder) as it:  # it = iterator returned by os.scandir(path)
@@ -57,10 +34,71 @@ with os.scandir(excelFolder) as it:  # it = iterator returned by os.scandir(path
 
             # process spreadsheets, one for each dir entry
             wb = openpyxl.load_workbook(dirEntry.path)
+
+            # get reference to worksheet
             ws = wb.active
-            billing_date("G9")
-            saveAsName = updateFolder + dirEntry.name
+
+            # set picture - Install Pillow?
+           #img = Image("image004.png")
+            #ws.add_image(img, "A5")
+
+            # invoice date
+            cell = update_cell("A2", "2020 Invoice")
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # officer contact info
+            cell = update_cell("A8", "Mark Greenberg - President\n205-505-9216")
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            cell.font = Font(name='Arial', size=12, b=True)
+
+            # title
+            cell = update_cell("C5", "Sterling Arbor\nNeighborhood Association, Inc.")
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            cell.font = Font(name='Arial', size=12, b=True)
+
+            # billing date
+            cell = update_cell("G9", "Billing Date: 09/30/2020")
+            cell.alignment = Alignment(horizontal="left", vertical="center")
+
+            # due date
+            cell = update_cell("G10", "Due Date....: 10/15/2020")
+            cell.alignment = Alignment(horizontal="left", vertical="center")
+
+            # activity date
+            cell = update_cell("A24", "1/01/2020")
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # detail description
+            desc = "Homeowner Dues for Year 2020"
+            cell = update_cell("D24", desc)
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+
+            # amount due
+            update_cell("H24", "$100")
+
+            # payment
+            update_cell("J24", "$0.00")
+
+            # total amount due
+            update_cell("H29", "$100.00")
+
+            # total payments
+            update_cell("J29", "$0.00")
+
+            # amount due
+            update_cell("J30", "$100.00")
+
+            # mail to
+            mailTo = "Mark Greenberg, 6983 Sterling Ln, Trussville, AL  35173"
+            cell = update_cell("C34", mailTo)
+            cell.alignment = Alignment(horizontal="left", vertical="center")
+
+
+            # save updated files to /updates folder, leaving original file as is.
+            newFileName = create_new_filename(dirEntry.name)
+
+            saveFileName = updateFolder + newFileName  # concat new file name with new folder name
             print("dirEntry.Name: " + dirEntry.name)
-            print("saveAsName: " + saveAsName)
-            wb.save(saveAsName)
+            print("saveAsName: " + saveFileName)
+            wb.save(saveFileName)
             wb.close()
