@@ -1,15 +1,16 @@
 import logging
 import os
 import sys
+from pathlib import Path
 import openpyxl
 from openpyxl.styles import Font
 from openpyxl.styles.alignment import Alignment
 
 cellsToValidate = ['A2', 'A8', 'G9', 'G10', 'A24', 'D24', 'H24', 'J24', 'H29', 'J29', 'J30']
 
-excelFolder = "/Users/mark/PycharmProjects/excel/"
+excelFolder = Path("/Users/mark/PycharmProjects/excel/")
 
-# excelFolder = "/Users/mark/Documents/Sterling Arbor Homeowners Documents/"
+# excelFolder = Path("/Users/mark/Documents/Sterling Arbor Homeowners Documents/")
 
 def get_logger():
     formatstr = "%(asctime)s %(levelname)-8s [%(funcName)s:%(lineno)d] %(message)s"
