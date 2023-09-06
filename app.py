@@ -71,7 +71,7 @@ with os.scandir(excelFolder) as it:  # it = iterator returned
             cell.alignment = Alignment(horizontal="center", vertical="center")
 
             # officer contact info
-            cell = update_cell("A8", "Mark Greenberg - President\n205-505-9216", ws)
+            cell = update_cell("A8", "Mark Greenberg - President\n205-555-9266", ws)
             cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
             cell.font = Font(name='Arial', size=12, b=True)
 
@@ -113,7 +113,7 @@ with os.scandir(excelFolder) as it:  # it = iterator returned
             update_cell("J30", "$100.00", ws)
 
             # mail to
-            mailTo = "Mark Greenberg, 6983 Sterling Ln, Trussville, AL  35173"
+            mailTo = Chris White, 6983 Woodvale, Trussville, AL  35173"
             cell = update_cell("C34", mailTo, ws)
             cell.alignment = Alignment(horizontal="left", vertical="center")
 
